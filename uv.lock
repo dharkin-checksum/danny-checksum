@@ -495,6 +495,12 @@ wheels = [
 ]
 
 [[package]]
+name = "crontab"
+version = "1.0.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d6/36/a255b6f5a2e22df03fd2b2f3088974b44b8c9e9407e26b44742cb7cfbf5b/crontab-1.0.5.tar.gz", hash = "sha256:f80e01b4f07219763a9869f926dd17147278e7965a928089bca6d3dc80ae46d5", size = 21963, upload-time = "2025-07-09T17:09:38.264Z" }
+
+[[package]]
 name = "cryptography"
 version = "46.0.5"
 source = { registry = "https://pypi.org/simple" }
@@ -574,6 +580,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "anthropic" },
+    { name = "crontab" },
     { name = "fastapi" },
     { name = "pydantic-ai" },
     { name = "pygithub" },
@@ -584,6 +591,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "anthropic" },
+    { name = "crontab" },
     { name = "fastapi" },
     { name = "pydantic-ai" },
     { name = "pygithub" },

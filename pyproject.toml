@@ -10,6 +10,7 @@ dependencies = [
     "anthropic",
     "fastapi",
     "uvicorn",
+    "crontab",
 ]
 
 [build-system]

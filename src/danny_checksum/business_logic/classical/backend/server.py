@@ -1,3 +1,4 @@
+import asyncio
 import os
 from contextlib import asynccontextmanager
 
@@ -5,6 +6,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Query
 from pydantic import BaseModel
 
+from danny_checksum.business_logic.classical.backend.background_tasks import poll_main_branch
 from danny_checksum.connectors.source_control.github_client import GitHubClient
 
 client: GitHubClient
@@ -15,8 +17,11 @@ async def lifespan(app: FastAPI):
     global client
     load_dotenv()
     token = os.environ["GITHUB_TOKEN"]
+    repo = os.environ["GITHUB_REPO"]
     client = GitHubClient.from_token(token)
+    task = asyncio.create_task(poll_main_branch(client, repo))
     yield
+    task.cancel()
 
 
 app = FastAPI(title="Danny Checksum GitHub API", lifespan=lifespan)
