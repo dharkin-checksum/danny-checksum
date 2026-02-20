@@ -3,8 +3,8 @@ import os
 
 from dotenv import load_dotenv
 
-from danny_checksum.agent import agent
-from danny_checksum.github_client import GitHubClient
+from danny_checksum.test_generator_agent import create_agent
+from danny_checksum.connectors.source_control.github_client import GitHubClient
 
 
 async def main() -> None:
@@ -16,6 +16,7 @@ async def main() -> None:
         return
 
     client = GitHubClient.from_token(token)
+    agent = create_agent(client)
     conversation_history = []
 
     print("GitHub Agent (type 'quit' to exit)")
@@ -33,7 +34,7 @@ async def main() -> None:
             break
 
         result = await agent.run(
-            user_input, deps=client, message_history=conversation_history
+            user_input, message_history=conversation_history
         )
         conversation_history = result.all_messages()
         print(f"\nAgent: {result.output}")
