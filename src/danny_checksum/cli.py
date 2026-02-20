@@ -3,7 +3,7 @@ import os
 
 from dotenv import load_dotenv
 
-from danny_checksum.test_generator_agent import create_agent
+from danny_checksum.business_logic.agentic.test_generator_agent import create_agent
 from danny_checksum.connectors.source_control.github_client import GitHubClient
 
 
