@@ -90,6 +90,16 @@ class GitHubClient:
         comment = pr.create_issue_comment(body=body)
         return f"Comment added: {comment.html_url}"
 
+    # --- Git Data ---
+
+    def get_file_blob_sha(self, repo: str, path: str, ref: str = "main") -> str | None:
+        """Return the blob SHA of a file at a given ref, or None if the file doesn't exist."""
+        tree = self.github.get_repo(repo).get_git_tree(ref)
+        for entry in tree.tree:
+            if entry.path == path:
+                return entry.sha
+        return None
+
     # --- Repo Content ---
 
     def get_file_content(self, repo: str, path: str, ref: str = "main") -> str:
