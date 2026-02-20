@@ -1,0 +1,18 @@
+[project]
+name = "danny-checksum"
+version = "0.1.0"
+description = "A pydantic-ai agent that reads and writes from GitHub"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic-ai",
+    "PyGithub",
+    "python-dotenv",
+    "anthropic",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/danny_checksum"]
