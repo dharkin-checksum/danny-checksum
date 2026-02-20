@@ -8,6 +8,8 @@ dependencies = [
     "PyGithub",
     "python-dotenv",
     "anthropic",
+    "fastapi",
+    "uvicorn",
 ]
 
 [build-system]
