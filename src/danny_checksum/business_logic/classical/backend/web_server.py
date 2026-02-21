@@ -26,6 +26,7 @@ async def lifespan(app: FastAPI):
     slack_token = os.environ["SLACK_AUTH_TOKEN"]
     slack_channel_id = "C0AFX0Y4U1M"
     slack_client = SlackClient.from_token(slack_token)
+    bot_user_id = slack_client.get_bot_user_id()
 
     async def _poll_git():
         while True:
@@ -38,7 +39,7 @@ async def lifespan(app: FastAPI):
     async def _poll_slack():
         while True:
             try:
-                poll_slack_channel(slack_client, slack_channel_id)
+                poll_slack_channel(slack_client, slack_channel_id, bot_user_id)
             except Exception as e:
                 print(f"poll_slack_channel error: {e}")
             await asyncio.sleep(300)

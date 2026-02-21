@@ -35,3 +35,27 @@ class SlackClient:
             ts = msg.get("ts", "")
             lines.append(f"[{ts}] {user}: {text}")
         return "\n".join(lines) if lines else "No messages found."
+
+    def post_message(self, channel_id: str, text: str, thread_ts: str | None = None) -> dict:
+        """Post a message to a channel, optionally in a thread. Returns result data."""
+        result = self.client.chat_postMessage(
+            channel=channel_id, text=text, thread_ts=thread_ts
+        )
+        return result.data
+
+    def read_thread_replies(
+        self, channel_id: str, thread_ts: str, oldest: str | None = None
+    ) -> list[dict]:
+        """Fetch thread replies, stripping the parent message."""
+        kwargs = {"channel": channel_id, "ts": thread_ts}
+        if oldest is not None:
+            kwargs["oldest"] = oldest
+        result = self.client.conversations_replies(**kwargs)
+        messages = result.get("messages", [])
+        # The first message is the parent; return only replies
+        return [m for m in messages if m.get("ts") != thread_ts]
+
+    def get_bot_user_id(self) -> str:
+        """Return the bot's own user_id via auth.test."""
+        result = self.client.auth_test()
+        return result["user_id"]

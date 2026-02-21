@@ -31,6 +31,18 @@ class SlackChannel(Base):
     last_thread_ts = Column(String, nullable=True)
 
 
+class SlackThread(Base):
+    __tablename__ = "slack_threads"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    channel_id = Column(String, nullable=False)
+    thread_ts = Column(String, nullable=False, unique=True)
+    session_id = Column(Integer, nullable=False)
+    message_history_json = Column(String, nullable=True)
+    last_reply_ts = Column(String, nullable=True)
+    created_at = Column(DateTime, nullable=False, server_default=func.now())
+
+
 class OnboardingSession(Base):
     __tablename__ = "onboarding_sessions"
 

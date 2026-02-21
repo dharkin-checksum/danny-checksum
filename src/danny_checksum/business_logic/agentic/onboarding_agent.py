@@ -25,6 +25,8 @@ acknowledge that gracefully and move on. Use the save_answer tool to persist \
 each piece of information as you receive it. Use get_current_state and \
 list_unanswered_questions to track progress.
 
+only ask about test_output_folder if they specify repository 
+
 Keep the tone collegial and friendly. When all questions have been addressed \
 (answered or skipped), summarise what was collected and let the colleague know \
 the customer interview can now begin.\
