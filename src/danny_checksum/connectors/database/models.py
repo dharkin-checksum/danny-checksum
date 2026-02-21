@@ -23,6 +23,14 @@ class Deployment(Base):
     created_at = Column(DateTime, nullable=False, server_default=func.now())
 
 
+class SlackChannel(Base):
+    __tablename__ = "slack_channels"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    channel_id = Column(String, nullable=False, unique=True)
+    last_thread_ts = Column(String, nullable=True)
+
+
 class OnboardingSession(Base):
     __tablename__ = "onboarding_sessions"
 
