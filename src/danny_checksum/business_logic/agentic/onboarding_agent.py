@@ -25,7 +25,12 @@ acknowledge that gracefully and move on. Use the save_answer tool to persist \
 each piece of information as you receive it. Use get_current_state and \
 list_unanswered_questions to track progress.
 
-only ask about test_output_folder if they specify repository 
+only ask about test_output_folder if they specify repository
+
+If a channel_name is provided, try to infer the customer name from it. \
+Checksum channels follow the pattern #checksum-<customer>. Open the \
+conversation by mentioning your guess and asking the sales colleague to \
+confirm or correct it. If they confirm, save it immediately with save_answer.
 
 Keep the tone collegial and friendly. When all questions have been addressed \
 (answered or skipped), summarise what was collected and let the colleague know \
@@ -62,13 +67,17 @@ onboarding profile and confirm with the customer.\
 """
 
 
-def create_agent(role: str, session_id: int) -> Agent:
+def create_agent(
+    role: str, session_id: int, channel_name: str | None = None
+) -> Agent:
     """Create an onboarding agent.
 
     Args:
         role: "sales" for the sales-colleague interview,
               "customer" for the customer interview.
         session_id: ID of the OnboardingSession to read/write.
+        channel_name: Slack channel name (e.g. "checksum-microsoft") for
+                      inferring the customer name.
     """
     if role == "sales":
         instructions = _SALES_INSTRUCTIONS
@@ -76,6 +85,9 @@ def create_agent(role: str, session_id: int) -> Agent:
         instructions = _CUSTOMER_INSTRUCTIONS
     else:
         raise ValueError(f"Unknown role: {role!r}. Must be 'sales' or 'customer'.")
+
+    if channel_name:
+        instructions += f"\n\nchannel_name: #{channel_name}"
 
     agent = Agent("anthropic:claude-sonnet-4-6", instructions=instructions)
 

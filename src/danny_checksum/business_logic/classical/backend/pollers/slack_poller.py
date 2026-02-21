@@ -7,15 +7,15 @@ from pydantic_ai.messages import ModelMessage
 
 from danny_checksum.business_logic.agentic.onboarding_agent import create_agent
 from danny_checksum.connectors.chat_programs.slack_client import SlackClient
-from danny_checksum.connectors.database import onboarding_dao, slack_thread_dao
+from danny_checksum.connectors.database import monitored_channel_dao, onboarding_dao, slack_thread_dao
 from danny_checksum.connectors.database.slack_dao import get_last_thread_ts, set_last_thread_ts
-
-CHANNEL_ID = "C0AFX0Y4U1M"
 
 _message_list_adapter = TypeAdapter(list[ModelMessage])
 
 
-def poll_slack_channel(client: SlackClient, channel_id: str, bot_user_id: str) -> None:
+def poll_slack_channel(
+    client: SlackClient, channel_id: str, bot_user_id: str, channel_name: str | None = None
+) -> None:
     client.join_channel(channel_id)
 
     # --- Part 1: new top-level messages ---
@@ -53,7 +53,7 @@ def poll_slack_channel(client: SlackClient, channel_id: str, bot_user_id: str) -
         slack_thread_dao.create_thread(channel_id, ts, session_id)
 
         # Run the onboarding agent
-        agent = create_agent(role="sales", session_id=session_id)
+        agent = create_agent(role="sales", session_id=session_id, channel_name=channel_name)
         agent_result = agent.run_sync(text)
 
         # Post the reply in a thread
@@ -92,7 +92,7 @@ def poll_slack_channel(client: SlackClient, channel_id: str, bot_user_id: str) -
             history = []
 
         # Recreate agent for this session
-        agent = create_agent(role="sales", session_id=thread.session_id)
+        agent = create_agent(role="sales", session_id=thread.session_id, channel_name=channel_name)
 
         # Process each new reply
         latest_reply_ts = thread.last_reply_ts
@@ -115,15 +115,24 @@ def poll_slack_channel(client: SlackClient, channel_id: str, bot_user_id: str) -
         )
 
 
+def poll_all_slack_channels(client: SlackClient, bot_user_id: str) -> None:
+    """Poll all monitored channels from the database."""
+    channels = monitored_channel_dao.list_channels()
+    for ch in channels:
+        poll_slack_channel(client, ch.channel_id, bot_user_id, ch.name)
+
+
 if __name__ == "__main__":
     load_dotenv()
     client = SlackClient.from_token(os.environ["SLACK_AUTH_TOKEN"])
     bot_user_id = client.get_bot_user_id()
     print(f"Bot user ID: {bot_user_id}")
-    print(f"Polling #{CHANNEL_ID} every 10s...")
+    channels = monitored_channel_dao.list_channels()
+    print(f"Monitoring {len(channels)} channel(s): {', '.join(f'#{c.name}' for c in channels)}")
+    print("Polling every 10s...")
     while True:
         try:
-            poll_slack_channel(client, CHANNEL_ID, bot_user_id)
+            poll_all_slack_channels(client, bot_user_id)
         except Exception as e:
-            print(f"poll_slack_channel error: {e}")
+            print(f"poll_all_slack_channels error: {e}")
         time.sleep(10)

@@ -7,7 +7,7 @@ from fastapi import FastAPI, Query
 from pydantic import BaseModel
 
 from danny_checksum.business_logic.classical.backend.pollers.git_poller import poll_main_branch
-from danny_checksum.business_logic.classical.backend.pollers.slack_poller import poll_slack_channel
+from danny_checksum.business_logic.classical.backend.pollers.slack_poller import poll_all_slack_channels
 from danny_checksum.connectors.chat_programs.slack_client import SlackClient
 from danny_checksum.connectors.database import deployment_dao
 from danny_checksum.connectors.source_control.github_client import GitHubClient
@@ -24,7 +24,6 @@ async def lifespan(app: FastAPI):
     client = GitHubClient.from_token(token)
 
     slack_token = os.environ["SLACK_AUTH_TOKEN"]
-    slack_channel_id = "C0AFX0Y4U1M"
     slack_client = SlackClient.from_token(slack_token)
     bot_user_id = slack_client.get_bot_user_id()
 
@@ -39,9 +38,9 @@ async def lifespan(app: FastAPI):
     async def _poll_slack():
         while True:
             try:
-                poll_slack_channel(slack_client, slack_channel_id, bot_user_id)
+                poll_all_slack_channels(slack_client, bot_user_id)
             except Exception as e:
-                print(f"poll_slack_channel error: {e}")
+                print(f"poll_all_slack_channels error: {e}")
             await asyncio.sleep(300)
 
     git_task = asyncio.create_task(_poll_git())

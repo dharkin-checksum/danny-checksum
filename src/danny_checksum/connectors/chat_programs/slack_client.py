@@ -59,3 +59,8 @@ class SlackClient:
         """Return the bot's own user_id via auth.test."""
         result = self.client.auth_test()
         return result["user_id"]
+
+    def get_channel_name(self, channel_id: str) -> str:
+        """Return the human-readable channel name for a channel ID."""
+        result = self.client.conversations_info(channel=channel_id)
+        return result["channel"]["name"]
