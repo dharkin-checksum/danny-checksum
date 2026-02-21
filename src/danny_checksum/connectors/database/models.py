@@ -43,8 +43,8 @@ class SlackThread(Base):
     created_at = Column(DateTime, nullable=False, server_default=func.now())
 
 
-class MonitoredSlackChannel(Base):
-    __tablename__ = "monitored_slack_channels"
+class CustomerSlackChannel(Base):
+    __tablename__ = "customer_slack_channels"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     channel_id = Column(String, nullable=False, unique=True)

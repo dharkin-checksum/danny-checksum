@@ -7,7 +7,7 @@ from pydantic_ai.messages import ModelMessage
 
 from danny_checksum.business_logic.agentic.onboarding_agent import create_agent
 from danny_checksum.connectors.chat_programs.slack_client import SlackClient
-from danny_checksum.connectors.database import monitored_channel_dao, onboarding_dao, slack_thread_dao
+from danny_checksum.connectors.database import customer_channel_dao, onboarding_dao, slack_thread_dao
 from danny_checksum.connectors.database.slack_dao import get_last_thread_ts, set_last_thread_ts
 
 _message_list_adapter = TypeAdapter(list[ModelMessage])
@@ -35,6 +35,10 @@ def poll_slack_channel(
 
         # Skip bot's own messages
         if msg.get("user") == bot_user_id:
+            continue
+
+        # Skip join notifications
+        if "has joined the channel" in msg.get("text", ""):
             continue
 
         # Skip threaded replies (they have a thread_ts different from their ts)
@@ -117,7 +121,7 @@ def poll_slack_channel(
 
 def poll_all_slack_channels(client: SlackClient, bot_user_id: str) -> None:
     """Poll all monitored channels from the database."""
-    channels = monitored_channel_dao.list_channels()
+    channels = customer_channel_dao.list_channels()
     for ch in channels:
         poll_slack_channel(client, ch.channel_id, bot_user_id, ch.name)
 
@@ -127,7 +131,7 @@ if __name__ == "__main__":
     client = SlackClient.from_token(os.environ["SLACK_AUTH_TOKEN"])
     bot_user_id = client.get_bot_user_id()
     print(f"Bot user ID: {bot_user_id}")
-    channels = monitored_channel_dao.list_channels()
+    channels = customer_channel_dao.list_channels()
     print(f"Monitoring {len(channels)} channel(s): {', '.join(f'#{c.name}' for c in channels)}")
     print("Polling every 10s...")
     while True:
