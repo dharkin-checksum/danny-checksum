@@ -7,6 +7,7 @@ from fastapi import FastAPI, Query
 from pydantic import BaseModel
 
 from danny_checksum.business_logic.classical.backend.background_tasks import poll_main_branch
+from danny_checksum.connectors.database import deployment_dao
 from danny_checksum.connectors.source_control.github_client import GitHubClient
 
 client: GitHubClient
@@ -19,7 +20,15 @@ async def lifespan(app: FastAPI):
     token = os.environ["GITHUB_TOKEN"]
     repo = os.environ["GITHUB_REPO"]
     client = GitHubClient.from_token(token)
-    task = asyncio.create_task(poll_main_branch(client, repo))
+    async def _poll():
+        while True:
+            try:
+                poll_main_branch(client, repo)
+            except Exception as e:
+                print(f"poll_main_branch error: {e}")
+            await asyncio.sleep(300)
+
+    task = asyncio.create_task(_poll())
     yield
     task.cancel()
 
@@ -62,6 +71,20 @@ class CreateOrUpdateFileRequest(BaseModel):
     content: str
     message: str
     branch: str = "main"
+
+
+class DeploymentRequest(BaseModel):
+    component: str
+    sha: str
+
+
+# --- Deployments ---
+
+
+@app.post("/deployment")
+def create_deployment(req: DeploymentRequest):
+    deployment_dao.create_deployment(req.component, req.sha)
+    return {"result": "ok"}
 
 
 # --- Issues ---
