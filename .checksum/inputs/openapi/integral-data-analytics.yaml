@@ -1,0 +1,3229 @@
+# Data Analytics API
+openapi: 3.0.3
+
+info:
+  title: Data Analytics API
+  description: |
+    The Data Analytics API provides comprehensive insights into your trading operations by aggregating data across various crucial aspects of transactions. This API serves as a powerful tool to retrieve and analyze data related to trades, orders, positions, profits, and other pivotal metrics.
+  license:
+    name: Integral
+    url: "https://integral.com"
+  version: 1.0.0
+
+servers:
+  - url: https://top10.sca.dc.integral.net/v2/data/analytics
+    description: Production server (HTTPS)
+  - url: http://cqtop10-03.sca.dc.integral.net:8099/data/analytics
+    description: Development server
+  - url: http://localhost:8080/data/analytics
+    description: Local server
+  - url: http://cqapp01.sca.dc.integral.net:8099/data/analytics
+    description: Backup development server
+
+security:
+  - jwtTokenAuth: []
+  - apiKeyAuth: []
+
+tags:
+  - name: Trade Data
+    description: Endpoints related to trade data
+  - name: Order Data
+    description: Endpoints related to order data
+  - name: RFS Data
+    description: Endpoints related to rfs data
+  - name: Authentication
+    description: Operations for authentication
+
+paths:
+  /trades/volume:
+    post:
+      operationId: tradesVolume
+      summary: Trade volume
+      description: This endpoint enables you to retrieve aggregated trade volume data based on specified filters and grouping criteria.
+      tags:
+        - Trade Data
+      requestBody:
+        $ref: '#/components/requestBodies/TradeVolumeRequestBody'
+      responses:
+        '200':
+          description: An array of TradeVolume objects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeVolumeResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+  /trades/stats:
+    post:
+      operationId: tradesStats
+      summary: Trade statistics (aggregated)
+      description: This endpoint enables you to retrieve aggregated trade activities based on specified filters and grouping criteria.
+      tags:
+        - Trade Data
+      requestBody:
+        $ref: '#/components/requestBodies/TradeStatsRequestBody'
+      responses:
+        '200':
+          description: Trade stats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeStatsResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /trades/compare:
+    post:
+      operationId: tradesCompare
+      summary: Trade data comparison
+      description: This endpoint facilitates the comparison of aggregated trade data between two distinct time periods based on specified filters and grouping criteria.
+      tags:
+        - Trade Data
+      requestBody:
+        $ref: '#/components/requestBodies/TradeCompareRequestBody'
+      responses:
+        '200':
+          description: Trade compare
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeCompareResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /trades/positions/ccypair:
+    post:
+      operationId: tradesPositionsCcyPair
+      summary: Positions by currency pair
+      description: This endpoint offers a comprehensive Positions-Currency Pair (CcyPair) report that provides insights into positions held within specific currency pairs based on specified filters and grouping criteria.
+      tags:
+        - Trade Data
+      requestBody:
+        $ref: '#/components/requestBodies/TradePositionsRequestBody'
+      responses:
+        '200':
+          description: Positions by currency pair data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionsCcyPairResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /trades/positions/ccy:
+    post:
+      operationId: tradesPositionsCcy
+      summary: Positions by currency
+      description: The endpoint offers a comprehensive overview of currency settlements, shedding light on the specific currency amounts slated for settlement based on specified filters and grouping criteria.
+      tags:
+        - Trade Data
+      requestBody:
+        $ref: '#/components/requestBodies/TradeSettlementsRequestBody'
+      responses:
+        '200':
+          description: Currency settlement data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionsCcyResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /trades/profit/cover:
+    post:
+      operationId: tradesProfitCover
+      summary: Profit by cover trades
+      description: The endpoint offers a specialized report that highlights the profitability achieved through cover trades based on specified filters and grouping criteria.
+      tags:
+        - Trade Data
+      requestBody:
+        $ref: '#/components/requestBodies/ProfitCoverRequestBody'
+      responses:
+        '200':
+          description: Cover trade data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfitResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /trades/profit/sales:
+    post:
+      operationId: tradesProfitSales
+      summary: Profit by sales spreads
+      description: The endpoint offers a report that highlights the profits achieved through the addition of spreads during the price provisioning process based on specified filters and grouping criteria.
+      tags:
+        - Trade Data
+      requestBody:
+        $ref: '#/components/requestBodies/ProfitSalesRequestBody'
+      responses:
+        '200':
+          description: Spread profit data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfitResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /trades/profit/spreads:
+    post:
+      operationId: tradesProfitSpreads
+      summary: Profit by All spreads
+      description: This endpoint generates a detailed Profit-Spreads report that highlights the profitability derived from All spreads defined within the system.
+      tags:
+        - Trade Data
+      requestBody:
+        $ref: '#/components/requestBodies/ProfitSpreadsRequestBody'
+      responses:
+        '200':
+          description: Profit from spreads data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfitSpreadsResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+  /trades/details:
+    post:
+      operationId: tradesDetails
+      summary: Details of All trades
+      description: This endpoint generates a detailed report of  all trades Done in the system.
+      tags:
+        - Trade Data
+      requestBody:
+        $ref: '#/components/requestBodies/TradeDetailsRequestBody'
+      responses:
+        '200':
+          description: Details of trades Done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeDetailsResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /trades/{id}:
+    get:
+      operationId: tradesId
+      summary: Trade tickets
+      description: This endpoint provides access to individual trade deal tickets based on the transaction ID (ID) specified in the URL.
+      parameters:
+        - name: id
+          in: path
+          description: ID of trade to return
+          required: true
+          schema:
+            type: string
+      tags:
+        - Trade Data
+      responses:
+        '200':
+          description: Trade ticket data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeTicketResponseBody'
+        '401':
+          description: Unauthorized.
+          
+  /orders/{id}:
+    get:
+      operationId: ordersId
+      summary: Order tickets
+      description: This endpoint provides access to individual order tickets based on the order id (ID) specified in the URL.
+      parameters:
+        - name: id
+          in: path
+          description: ID of order to return
+          required: true
+          schema:
+            type: string
+      tags:
+        - Order Data
+      responses:
+        '200':
+          description: Order ticket data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderTicketResponseBody"
+        '401':
+          description: Unauthorized.
+          
+  /orders/customer/{id}:
+    get:
+      operationId: ordersCustomerId
+      summary: Order customer tickets
+      description: This endpoint provides access to individual customer order tickets based on the order id (ID) specified in the URL.
+      parameters:
+        - name: id
+          in: path
+          description: ID of order to return
+          required: true
+          schema:
+            type: string
+      tags:
+        - Order Data
+      responses:
+        '200':
+          description: Order ticket data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderTicketResponseBody"
+        '401':
+          description: Unauthorized.
+
+  /orders/volume:
+    post:
+      operationId: ordersVolume
+      summary: Order volume
+      description: This endpoint enables you to retrieve aggregated order volume data based on specified filters and grouping criteria.
+      tags:
+        - Order Data
+      requestBody:
+        $ref: '#/components/requestBodies/OrdersVolumeRequestBody'
+      responses:
+        '200':
+          description: Order volume data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersVolumeResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /rfs/volume:
+    post:
+      operationId: rfsVolume
+      summary: RFS volume
+      description: This endpoint enables you to retrieve aggregated volume data for RFS based on specified filters and grouping criteria.
+      tags:
+        - RFS Data
+      requestBody:
+        $ref: '#/components/requestBodies/RFSVolumeRequestBody'
+      responses:
+        '200':
+          description: RFS volume data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersVolumeResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /orders/stats:
+    post:
+      operationId: ordersStats
+      summary: Order statistics
+      description: This endpoint enables you to retrieve aggregated order activities based on specified filters and grouping criteria.
+      tags:
+        - Order Data
+      requestBody:
+        $ref: '#/components/requestBodies/OrdersStatisticsRequestBody'
+      responses:
+        '200':
+          description: Order statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersStatsResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /rfs/stats:
+    post:
+      operationId: rfsStats
+      summary: RFS stats
+      description: This endpoint enables you to retrieve aggregated statistics data for RFS based on specified filters and grouping criteria.
+      tags:
+        - RFS Data
+      requestBody:
+        $ref: '#/components/requestBodies/RFSVolumeRequestBody'
+      responses:
+        '200':
+          description: RFS stats data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersStatsResponseBody'
+        '400':
+          description: Bad Request.
+        '404':
+          description: Not Found.
+        '405':
+          description: Method Not Allowed.
+        '401':
+          description: Unauthorized.
+
+  /authenticate:
+    post:
+      operationId: authenticate
+      summary: Authentication
+      description: This endpoint facilitates user authentication with the data API.
+      tags:
+        - Authentication
+      requestBody:
+        $ref: '#/components/requestBodies/AuthRequestBody'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+          
+components:
+  schemas:
+    TradeGroupByRequest:
+      type: object
+      properties:
+        groupBy:
+          type: array
+          description: >
+            The list of grouping fields to aggregate trade data by.
+              - Cpty: Counterparty
+              - CptyLongName: Counterparty Long Name
+              - CptyAccount: Counterparty Account
+              - CptyDealer: Counterparty Dealer
+              - CptyRegion: Counterparty Region
+              - CptyCountry: Counterparty Country
+              - Account: Account
+              - PortfolioID: Portfolio ID
+              - LEI: Legal Entity Identifier
+              - ClientTag: Client Tag
+              - Dealer: Dealer
+              - CcyPair: Currency Pair
+              - CoveredCpty: Covered Counterparty
+              - PrimeBroker: Prime Broker
+              - PBAccount: Prime Broker Account
+              - MkrTkr: Maker/Taker
+              - Date: Date
+              - Week: Week
+              - Month: Month
+              - Quarter: Quarter
+              - Channel-WorkflowType: Channel Workflow Type
+              - Stream: Stream
+              - TrdType: Trade Type
+              - Book: Book
+              - None: None
+          items:
+            type: string
+            enum:
+              - Cpty
+              - CptyLongName
+              - CptyAccount
+              - CptyDealer
+              - CptyRegion
+              - CptyCountry
+              - Account
+              - PortfolioID
+              - LEI
+              - ClientTag
+              - Dealer
+              - CcyPair
+              - CoveredCpty
+              - PrimeBroker
+              - PBAccount
+              - MkrTkr
+              - Date
+              - Week
+              - Month
+              - Quarter
+              - Channel-WorkflowType
+              - Stream
+              - TrdType
+              - Book
+              - None
+          minItems: 1
+          maxItems: 3
+    TradeDetailsGroupByRequest:
+      type: object
+      properties:
+        groupBy:
+          type: array
+          description: >
+            The list of grouping fields to aggregate trade data by.
+              - Cpty: Counterparty
+              - CptyLongName: Counterparty Long Name
+              - CptyAccount: Counterparty Account
+              - CptyDealer: Counterparty Dealer
+              - CptyRegion: Counterparty Region
+              - CptyCountry: Counterparty Country
+              - Account: Account
+              - PortfolioID: Portfolio ID
+              - LEI: Legal Entity Identifier
+              - ClientTag: Client Tag
+              - Dealer: Dealer
+              - CcyPair: Currency Pair
+              - CoveredCpty: Covered Counterparty
+              - PrimeBroker: Prime Broker
+              - PBAccount: Prime Broker Account
+              - MkrTkr: Maker/Taker
+              - Date: Date
+              - Week: Week
+              - Month: Month
+              - Quarter: Quarter
+              - Channel-WorkflowType: Channel Workflow Type
+              - Stream: Stream
+              - TrdType: Trade Type
+              - Book: Book
+              - None: None
+          items:
+            type: string
+            enum:
+              - Cpty
+              - CptyLongName
+              - CptyAccount
+              - CptyDealer
+              - CptyRegion
+              - CptyCountry
+              - Account
+              - PortfolioID
+              - LEI
+              - ClientTag
+              - Dealer
+              - CcyPair
+              - CoveredCpty
+              - PrimeBroker
+              - PBAccount
+              - MkrTkr
+              - Date
+              - Week
+              - Month
+              - Quarter
+              - Channel-WorkflowType
+              - Stream
+              - TrdType
+              - Book
+              - None
+          minItems: 1
+          maxItems: 2
+    TradeProfitGroupByRequest:
+      type: object
+      properties:
+        groupBy:
+          type: array
+          description: >
+            The list of grouping fields to aggregate trade data by.
+              - Cpty: Counterparty
+              - CptyLongName: Counterparty Long Name
+              - CptyAccount: Counterparty Account
+              - CptyDealer: Counterparty Dealer
+              - Account: Account
+              - PortfolioID: Portfolio ID
+              - ClientTag: Client Tag
+              - Dealer: Dealer
+              - CcyPair: Currency Pair
+              - CoveredCpty: Covered Counterparty
+              - MkrTkr: Maker/Taker
+              - Date: Date
+              - Week: Week
+              - Month: Month
+              - Channel-WorkflowType: Channel Workflow Type
+              - Stream: Stream
+              - TrdType: Trade Type
+              - Book: Book
+              - ValueDate: Value Date
+              - None: None
+          items:
+            type: string
+            enum:
+              - Cpty
+              - CptyLongName
+              - CptyAccount
+              - CptyDealer
+              - Account
+              - PortfolioID
+              - ClientTag
+              - Dealer
+              - CcyPair
+              - CoveredCpty
+              - MkrTkr
+              - Date
+              - Week
+              - Month
+              - Channel-WorkflowType
+              - Stream
+              - TrdType
+              - Book
+              - ValueDate
+              - None
+          minItems: 1
+          maxItems: 3
+    
+    TradeCompareGroupByRequest:
+      type: object
+      properties:
+        groupBy:
+          type: array
+          description: >
+            The list of grouping fields to aggregate trade data by.
+              - Cpty: Counterparty
+              - CptyLongName: Counterparty Long Name
+              - CptyAccount: Counterparty Account
+              - Account: Account
+              - Dealer: Dealer
+              - CcyPair: Currency Pair
+              - MkrTkr: Maker/Taker
+              - Channel-WorkflowType: Channel Workflow Type
+              - Stream: Stream
+              - TrdType: Trade Type
+              - None: None
+          items:
+            type: string
+            enum:
+              - Cpty
+              - CptyLongName
+              - CptyAccount
+              - Account
+              - Dealer
+              - CcyPair
+              - MkrTkr
+              - Channel-WorkflowType
+              - Stream
+              - TrdType
+              - None
+          minItems: 1
+          maxItems: 3
+    
+    TradeSettlementGroupByRequest:
+      type: object
+      properties:
+        groupBy:
+          type: array
+          description: >
+            The list of grouping fields to aggregate trade data by.
+              - Cpty: Counterparty
+              - CptyLongName: Counterparty Long Name
+              - CptyAccount: Counterparty Account
+              - Account: Account
+              - PortfolioID: Portfolio ID
+              - ClientTag: Client Tag
+              - Dealer: Dealer
+              - Ccy: Currency
+              - PrimeBroker: Prime Broker
+              - PBAccount: Prime Broker Account
+              - MkrTkr: Maker/Taker
+              - Date: Date
+              - Channel: Channel
+              - Channel-WorkflowType: Channel Workflow Type
+              - TrdType: Trade Type
+              - None: None
+          items:
+            type: string
+            enum:
+              - Cpty
+              - CptyLongName
+              - CptyAccount
+              - Account
+              - PortfolioID
+              - ClientTag
+              - Dealer
+              - Ccy
+              - PrimeBroker
+              - PBAccount
+              - MkrTkr
+              - Date
+              - Channel
+              - Channel-WorkflowType
+              - TrdType
+              - None
+          minItems: 1
+          maxItems: 3
+
+    TradePositionsGroupByRequest:
+      type: object
+      properties:
+        groupBy:
+          type: array
+          description: >
+            The list of grouping fields to aggregate trade data by.
+              - Cpty: Counterparty
+              - CptyLongName: Counterparty Long Name
+              - CptyAccount: Counterparty Account
+              - Account: Account
+              - PortfolioID: Portfolio ID
+              - ClientTag: Client Tag
+              - Dealer: Dealer
+              - CcyPair: Currency Pair
+              - PrimeBroker: Prime Broker
+              - PBAccount: Prime Broker Account
+              - MkrTkr: Maker/Taker
+              - Date: Date
+              - Channel: Channel
+              - Channel-WorkflowType: Channel Workflow Type
+              - TrdType: Trade Type
+              - None: None
+          items:
+            type: string
+            enum:
+              - Cpty
+              - CptyLongName
+              - CptyAccount
+              - Account
+              - PortfolioID
+              - ClientTag
+              - Dealer
+              - CcyPair
+              - PrimeBroker
+              - PBAccount
+              - MkrTkr
+              - Date
+              - Channel
+              - Channel-WorkflowType
+              - TrdType
+              - None
+          minItems: 1
+          maxItems: 3
+    
+    OrderGroupByRequest:
+      type: object
+      properties:
+        groupBy:
+          type: array
+          description: >
+            The list of grouping fields to aggregate trade data by.
+              - Org: Organization
+              - Account: Account
+              - OrgLongName: Org Name
+              - PortfolioID: Portfolio ID
+              - LEI: Legal Entity Identifier
+              - Dealer: Dealer
+              - CcyPair: Currency Pair
+              - Date: Date
+              - Week: Week
+              - Month: Month
+              - Quarter: Quarter
+              - Contingency: Contingency
+              - Channel-WorkflowType: Channel Workflow Type
+              - TrdType: Trade Type
+              - OrderType: OrderType
+              - Strategy: Strategy
+              - OrderState: OrderState
+              - OrderTIF: OrderTIF
+              - None: None
+          items:
+            type: string
+            enum:
+              - Org
+              - Account
+              - OrgLongName
+              - PortfolioID
+              - LEI
+              - Dealer
+              - CcyPair
+              - Date
+              - Week
+              - Month
+              - Quarter
+              - Contingency
+              - Channel-WorkflowType
+              - TrdType
+              - OrderType
+              - Strategy
+              - OrderState
+              - OrderTIF
+              - None
+          minItems: 1
+          maxItems: 3
+    
+    BaseRequest:
+      type: object
+      properties:
+        organizations:
+          type: array
+          description: >
+            (i) A list of organization names to filter the trade data. 
+            Each organization name should be a string that matches the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 500 characters
+              - Allowed characters: Alphanumeric characters, commas, and asterisks.
+            
+            If not specified, the default value is ["All"], which includes All organizations.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 500
+            pattern: ^[a-zA-Z0-9+,*]+$
+          default: ["All"]
+        tradeTypes:
+          type: array
+          description: >
+            The types of trades to filter by. The available trade types include:
+              - **spot**: Spot trades
+              - **outright**: Outright trades
+              - **NDF**: Non-Deliverable Forward trades
+              - **swap**: Swap trades
+              - **SSP**: Same-Day Spot trades
+              - **All**: All types of trades
+        
+            If not specified, the default value is ["All"].
+          items:
+            type: string
+            enum:
+              - spot
+              - outright
+              - NDF
+              - swap
+              - SSP
+              - All
+          default: ['spot']
+        tradeLegs:
+          type: array
+          description: >
+            The types of legs to filter by. The available trade legs include:
+              - **near**: Near leg of the trade
+              - **far**: Far leg of the trade
+              - **All**: All legs of the trade
+        
+            If not specified, the default value is ["All"].
+          items:
+            type: string
+            enum:
+              - near
+              - far
+              - All
+          default: ['All']
+        symbols:
+          type: array
+          description: >
+            The names of the instrument/currency pair to filter trade data by. 
+             >
+            Each symbol should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 500 characters
+              - Allowed characters: Alphanumeric characters, commas, and asterisks.
+        
+            If not specified, the default value is ["All"], which includes All symbols.
+          items:
+            type: string
+            minLength: 2
+            maxLength: 500
+            pattern: ^[a-zA-Z0-9+,*]+$
+          default: ["All"]
+        channelProducts:
+          type: array
+          description: >
+            (i) Filter trades based on the channel product.
+             > 
+            Each channel product should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters, commas, and asterisks.
+        
+            If not specified, the default value is ["All"], which includes All channel products.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9+,*]+$
+          default: ["All"]
+        channelWorkflows:
+          type: array
+          description: >
+            Filter trades based on the channel workflow.
+             > 
+            Each channel workflow should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters, commas, and asterisks.
+        
+            If not specified, the default value is ["All"], which includes All channel workflows.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9+,*]+$
+          default: ["All"]
+        channelComponents:
+          type: array
+          description: >
+            (i) Filter trades based on the channel component.
+             > 
+            Each channel component should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters, commas, and asterisks.
+        
+            If not specified, the default value is ["All"], which includes All channel components.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9+,*]+$
+          default: ["All"]
+        internalGroup:
+          type: array
+          description: >
+            (i) The names of the Organization Group to filter trade data by.
+             > 
+            Each group name should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 500 characters
+              - Allowed characters: Alphanumeric characters, commas, and asterisks.
+        
+            If not specified, the default value is ["All"], which includes All organization groups.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 500
+            pattern: ^[a-zA-Z0-9+,*]+$
+          default: ["All"]
+        isOrganizationGroup:
+          type: boolean
+          description: >
+            (i) Include organizational group trades in the results.
+             >
+            This field is a boolean and can either be true or false.
+            If not specified, the default value is false.
+          default: false
+        startDate:
+          type: string
+          description: >
+            Filter trades based on the start date.
+             > 
+            The date should be in the format dd-MMM-yyyy, e.g., 01-Jan-2020.
+            The minimum and maximum length of the date string is 11 characters.
+          minLength: 11
+          maxLength: 11
+
+        endDate:
+          type: string
+          description: >
+            Filter trades based on the end date.
+             >
+            The date should be in the format dd-MMM-yyyy, e.g., 01-Jan-2020.
+            The minimum and maximum length of the date string is 11 characters.
+          minLength: 11
+          maxLength: 11
+      required:
+        - groupBy
+        - startDate
+        - endDate
+        
+    TradeRequest:
+      allOf:
+        - $ref: '#/components/schemas/TradeGroupByRequest'
+        - $ref: '#/components/schemas/BaseRequest'
+        - $ref: '#/components/schemas/TradeParamsRequest'
+        - type: object
+          
+    TradeDetailsRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - $ref: '#/components/schemas/TradeParamsRequest'
+        - type: object
+          properties:
+            executionStartTime:
+              type: string
+              description: >
+                Execution start time.
+                  >
+                The time should be in the format 'dd-MMM-yyyy hh:mm:ss', e.g. '01-Nov-2024 10:00:00'.
+            executionEndTime:
+              type: string
+              description: >
+                Execution end time.
+                  >
+                The time should be in the format 'dd-MMM-yyyy hh:mm:ss', e.g. '01-Nov-2024 21:00:00'.
+            tradeID:
+              type: string
+              description: Transaction ID of the trade.
+            orderID:
+              type: string
+              description: order Id
+
+    TradeParamsRequest:
+      type: object
+      properties: 
+        counterparties:
+          type: array
+          description: >
+            The names of the counterparties to filter trade data by.
+              >
+            Each counterparty name should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 500 characters
+              - Allowed characters: Alphanumeric characters, commas, and asterisks.
+        
+            If not specified, the default value is ["All"], which includes All counterparties.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 500
+            pattern: ^[a-zA-Z0-9+,*]+$
+          default: ["All"]
+        includeDirectTrades:
+          type: boolean
+          description: >
+            Include direct trades in the results.
+              >
+            This field is a boolean and can either be true or false.
+            If not specified, the default value is true.
+          default: true
+        includePrimeBrokerDirectTrades:
+          type: boolean
+          description: >
+            Include PB direct trades in the results.
+              >
+            This field is a boolean and can either be true or false.
+            If not specified, the default value is false.
+          default: false
+        assetClasses:
+          type: string
+          description: >
+            (i) Filter trades based on the asset class.
+              >
+            The available asset classes include:
+              - **All**: All asset classes
+              - **METAL**: Metal asset class
+              - **CURRENCY**: Currency asset class
+              - **CRYPTO**: Cryptocurrency asset class
+              - **INDEX**: Index asset class
+              
+            If not specified, the default value is "All".
+          default: "All"
+
+        book:
+          type: string
+          description: >
+            Filter trades based on the book type.
+              > 
+            The available book types include:
+              - **A**: Book type A
+              - **B**: Book type B
+              - **All**: All book types
+              - **None**: No book type
+            
+            If not specified, the default value is "All".
+          default: "All"
+
+        brokerTradeTypes:
+          type: string
+          description: >
+            Filter trades based on the broker trade types.
+              > 
+            The available broker trade types include:
+              - **All**: All broker trade types
+              - **Cover**: Covered trades
+              - **Covered**: Covered trades
+              - **NotCovered**: Non-covered trades
+              - **DirectLP**: Direct LP trades
+            
+            If not specified, the default value is "All".
+          default: "All"
+
+        clientTags:
+          type: array
+          description: >
+            Filter trades based on the client tag.
+              >
+            Each client tag should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+        
+            If not specified, the default value is ["All"], which includes All client tags.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+          default: ["All"]
+
+        clientTagType:
+          type: string
+          description: >
+            Filter trades based on the client tag type.
+              >
+            The available client tag types include:
+              - **Cpty**: Counterparty
+              - **Trade**: Trade
+            
+            If not specified, the default value is "Cpty".
+          default: "Cpty"
+
+        coveredCounterparties:
+          type: array
+          description: >
+            Filter trades based on the covered counterparty.
+              > 
+            Each covered counterparty should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters, commas, and asterisks.
+        
+            If not specified, the default value is ["All"], which includes All covered counterparties.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9+,*]+$
+          default: ["All"]
+
+        counterpartyAccounts:
+          type: array
+          description: >
+            Filter trades based on the counterparty account.
+              > 
+            Each counterparty account should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+        
+            If not specified, the default value is ["All"], which includes All counterparty accounts.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+          default: ["All"]
+
+        counterpartyBrokerLevel1:
+          type: string
+          description: >
+            (i) Filter trades based on the counterparty broker level 1.
+              > 
+            Each broker level should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+            
+            If not specified, the default value is "All", which includes All counterparties.
+          default: "All"
+
+        counterpartyBrokerLevel2:
+          type: string
+          description: >
+            (i) Filter trades based on the counterparty broker level 2.
+              > 
+            Each broker level should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+            
+            If not specified, the default value is "All", which includes All counterparties.
+          default: "All"
+
+        counterpartyBrokerLevel3:
+          type: string
+          description: >
+            (i) Filter trades based on the counterparty broker level 3.
+              > 
+            Each broker level should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+            
+            If not specified, the default value is "All", which includes All counterparties.
+          default: "All"
+
+        counterpartyCountries:
+          type: string
+          description: >
+            Filter trades based on the counterparty country.
+              > 
+            Each country should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 50 characters
+              - Allowed characters: Alphabetic characters, separated by commas.
+            
+            If not specified, the default value is "All", which includes All counterparty countries.
+          default: "All"
+
+        counterpartyDealers:
+          type: array
+          description: >
+            Filter trades based on the counterparty dealer.
+              > 
+            Each counterparty dealer should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+        
+            If not specified, the default value is ["All"], which includes All counterparty dealers.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+          default: ["All"]
+
+        counterpartyOrganizationRegions:
+          type: string
+          description: >
+            Filter trades based on the counterparty organization region.
+              >
+            The available regions include:
+              - **All**: All regions
+              - **America**: Americas region
+              - **Asia-Pacific**: Asia-Pacific region
+              - **EMEA**: Europe, Middle East, and Africa region
+              
+            If not specified, the default value is "All", which includes All counterparty organization regions.
+          default: "All"
+
+        counterpartySegments:
+          type: string
+          description: >
+            (i) Filter trades based on the counterparty segment.
+              > 
+            Each segment should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+            
+            If not specified, the default value is "All", which includes All counterparty segments.
+          default: "All"
+
+        datacenters:
+          type: string
+          description: >
+            Filter trades based on datacenters.
+              > 
+            The available datacenters include:
+              - **All**: All data centers
+              - **NYC**: New York
+              - **LDN**: London
+              - **MSC**: Moscow
+              - **TYO**: Tokyo
+              - **SGP**: Singapore
+        
+            If not specified, the default value is "All", which includes All datacenters.
+
+        tradeSide:
+          type: string
+          description: >
+            Filter trades based on the maker or taker.
+              > 
+            The available sides include:
+              - **All**: All trades
+              - **Maker**: Maker side of the trade
+              - **Taker**: Taker side of the trade
+            
+            If not specified, the default value is "All".
+          default: "All"
+
+        organizationAccounts:
+          type: array
+          description: >
+            Filter trades based on the organization account.
+              > 
+            Each organization account should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+        
+            If not specified, the default value is ["All"], which includes All organization accounts.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+          default: ["All"]
+
+        organizationCountries:
+          type: string
+          description: >
+            (i) Filter trades based on the organization country.
+              > 
+            Each country should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 50 characters
+              - Allowed characters: Alphabetic characters, separated by commas.
+            If not specified, the default value is "All", which includes All organization countries.
+          default: "All"
+
+        organizationDealers:
+          type: array
+          description: >
+            Filter trades based on the organization dealer.
+              >
+            Each organization dealer should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+        
+            If not specified, the default value is ["All"], which includes All organization dealers.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+          default: ["All"]
+
+        organizationLEI:
+          type: string
+          description: >
+            (i) Filter trades based on the organization Legal Entity Identifier.
+              > 
+            Each LEI should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 100 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+            If not specified, the default value is "All", which includes All organization legal entities.
+          default: "All"
+        organizationRegions:
+          type: string
+          description: >
+            (i) Filter trades based on the organization region.
+              > 
+            The available regions include:
+              - **All**: All regions
+              - **America**: Americas region
+              - **Asia-Pacific**: Asia-Pacific region
+              - **EMEA**: Europe, Middle East, and Africa region
+            
+            If not specified, the default value is "All", which includes All organization regions.
+          default: "All"
+        organizationSegments:
+          type: string
+          description: >
+            (i) Filter trades based on the organization segment.
+              > 
+            The available segments include:
+              - **All**: All segments
+              - **Institution**: Institutional segment
+              - **Margin FX**: Margin FX segment
+              - **Asset Manager**: Asset Manager segment
+              - **Bank**: Banking segment
+            
+            If not specified, the default value is "All", which includes All organization segments.
+          default: "All"
+
+        originatingCounterparties:
+          type: array
+          description: >
+            (i) Filter trades based on the originating counterparty.
+              > 
+            Each originating counterparty should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+        
+            If not specified, the default value is ["All"], which includes All originating counterparties.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 50
+            pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+          default: ["All"]
+
+        portfolios:
+          type: array
+          description: >
+            Filter trades based on the portfolio.
+              > 
+            Each portfolio should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 100 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+        
+            If not specified, the default value is ["All"], which includes All portfolios.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+            pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+          default: ["All"]
+
+        primeBrokers:
+          type: array
+          description: >
+            Filter trades based on the prime broker.
+              > 
+            Each prime broker should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 100 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+          
+            If not specified, the default value is ["All"], which includes All prime brokers.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+            pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+          default: ["All"]
+
+        streams:
+          type: array
+          description: >
+            Filter trades based on the stream.
+              > 
+            Each stream should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 100 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+        
+            If not specified, the default value is ["All"], which includes All streams.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+            pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+          default: ["All"]
+
+        dateType:
+          type: string
+          description: >
+            (i) Filter trades based on the trade date or value date.
+              > 
+            The available date types include:
+              - **tradeDate**: Trade date
+              - **valueDate**: Value date
+
+        virtualServer:
+          type: string
+          description: >
+            (i) Filter trades based on the virtual server.
+              > 
+            Each virtual server should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 50 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+
+        subAssetClasses:
+          type: string
+          description: >
+            (i) Filter trades based on the sub asset class.
+              > 
+            Each sub asset class should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 100 characters
+              - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+            
+            If not specified, the default value is "All".
+          default: "All"
+
+        includeFullAmountTrades:
+          type: string
+          description: >
+            (i) Filter trades based on the full amount.
+              > 
+            The available options include:
+              - **All**: All trades
+              - **Y**: Trades with full amount
+              - **N**: Trades without full amount
+            
+            If not specified, the default value is "All".
+          default: "All"
+    
+    OrderRequest:
+      allOf:
+        - $ref: '#/components/schemas/OrderGroupByRequest'
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          properties:
+            counterparties:
+              type: array
+              description: >
+                (i) The names of the counterparties to filter order data by.
+                 > 
+                Each counterparty name should match the following criteria:
+                  - Minimum length: 1 character
+                  - Maximum length: 500 characters
+                  - Allowed characters: Alphanumeric characters, commas, and asterisks.
+            
+                If not specified, the default value is ["All"], which includes All counterparties.
+              items:
+                type: string
+                minLength: 1
+                maxLength: 500
+                pattern: ^[a-zA-Z0-9+,*]+$
+              default: ["All"]
+            
+            datacenters:
+              type: string
+              description: >
+                (i) Filter trades based on datacenters.
+                 > 
+                The available datacenters include:
+                  - **All**: All data centers
+                  - **NYC**: New York
+                  - **LDN**: London
+                  - **MSC**: Moscow
+                  - **TYO**: Tokyo
+                  - **SGP**: Singapore
+            
+                If not specified, the default value is "All", which includes All datacenters.
+            
+            includeCustomerOrders:
+              type: boolean
+              description: >
+                Include Customer Orders for the Broker in the results.
+                 >
+                This field is a boolean and can either be true or false.
+                If not specified, the default value is false.
+              default: false
+            
+            organizationAccounts:
+              type: array
+              description: >
+                Filter trades based on the organization account.
+                 > 
+                Each organization account should match the following criteria:
+                  - Minimum length: 1 character
+                  - Maximum length: 50 characters
+                  - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+            
+                If not specified, the default value is ["All"], which includes All organization accounts.
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+                pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+              default: ["All"]
+            
+            organizationCountries:
+              type: string
+              description: >
+                (i) Filter trades based on the organization country.
+                 > 
+                Each country should match the following criteria:
+                  - Minimum length: 2 characters
+                  - Maximum length: 50 characters
+                  - Allowed characters: Alphabetic characters, separated by commas.
+            
+                If not specified, the default value is "All", which includes All organization countries.
+              minLength: 2
+              maxLength: 50
+              pattern: ^[a-zA-Z]+(?:,[a-zA-Z]+)*$
+              default: "All"
+            
+            organizationDealers:
+              type: array
+              description: >
+                Filter trades based on the organization dealer.
+                 > 
+                Each organization dealer should match the following criteria:
+                  - Minimum length: 1 character
+                  - Maximum length: 50 characters
+                  - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+              
+                If not specified, the default value is ["All"], which includes All organization dealers.
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+                pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+              default: ["All"]
+            
+            organizationLEI:
+              type: string
+              description: >
+                Filter trades based on the organization Legal Entity Identifier.
+                 > 
+                Each LEI should match the following criteria:
+                  - Minimum length: 2 characters
+                  - Maximum length: 100 characters
+                  - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+            
+                If not specified, the default value is "All", which includes All organization LEIs.
+              minLength: 2
+              maxLength: 100
+              pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+(,[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+)*$
+              default: "All"
+            
+            organizationRegions:
+              type: string
+              description: >
+                (i) Filter trades based on the organization region.
+                 > 
+                The available regions include:
+                  - **All**: All regions
+                  - **America**: Americas region
+                  - **Asia-Pacific**: Asia-Pacific region
+                  - **EMEA**: Europe, Middle East, and Africa region
+            
+                If not specified, the default value is "All", which includes All organization regions.
+              enum:
+                - All
+                - America
+                - Asia-Pacific
+                - EMEA
+              default: "All"
+            
+            organizationSegments:
+              type: string
+              description: >
+                (i) Filter trades based on the organization segment.
+                 > 
+                The available segments include:
+                  - **All**: All segments
+                  - **Institution**: Institutional segment
+                  - **Margin FX**: Margin FX segment
+                  - **Asset Manager**: Asset Manager segment
+                  - **Bank**: Banking segment
+            
+                If not specified, the default value is "All", which includes All organization segments.
+              enum:
+                - All
+                - Institution
+                - Margin FX
+                - Asset Manager
+                - Bank
+              default: "All"
+            
+            counterpartyOrganizationRegions:
+              type: string
+              description: >
+                Filter trades based on the counterparty organization region.
+                 >
+                The available regions include:
+                  - **All**: All regions
+                  - **America**: Americas region
+                  - **Asia-Pacific**: Asia-Pacific region
+                  - **EMEA**: Europe, Middle East, and Africa region
+
+                If not specified, the default value is "All", which includes All counterparty organization regions.
+              default: "All"
+
+            originatingCounterparties:
+              type: array
+              description: >
+                (i) Filter trades based on the originating counterparty.
+                 > 
+                Each originating counterparty should match the following criteria:
+                  - Minimum length: 1 character
+                  - Maximum length: 50 characters
+                  - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+            
+                If not specified, the default value is ["All"], which includes All originating counterparties.
+              items:
+                type: string
+                minLength: 1
+                maxLength: 50
+                pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+              default: ["All"]
+            
+            portfolios:
+              type: array
+              description: >
+                Filter trades based on the portfolio.
+                 > 
+                Each portfolio should match the following criteria:
+                  - Minimum length: 1 character
+                  - Maximum length: 100 characters
+                  - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-).
+            
+                If not specified, the default value is ["All"], which includes All portfolios.
+              items:
+                type: string
+                minLength: 1
+                maxLength: 100
+                pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+$
+              default: ["All"]
+            
+            virtualServer:
+              type: string
+              description: >
+                (i) Filter orders based on the virtual server.
+                 > 
+                Each virtual server should match the following criteria:
+                  - Minimum length: 2 characters
+                  - Maximum length: 50 characters
+                  - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+            
+                If not specified, the default value is "All", which includes All virtual servers.
+              minLength: 2
+              maxLength: 50
+              pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+(,[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+)*$
+              default: "All"
+            
+            orderStrategy:
+              type: string
+              description: >
+                (i) Filter orders based on strategy.
+                 > 
+                Each strategy should match the following criteria:
+                  - Minimum length: 2 characters
+                  - Maximum length: 100 characters
+                  - Allowed characters: Alphanumeric characters and special characters (!@#$%^&*()_+=|:<>.-), separated by commas.
+              
+                If not specified, the default value is "All", which includes All strategies.
+              minLength: 2
+              maxLength: 100
+              pattern: ^[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+(,[a-zA-Z0-9 !@#$%^&*()_+=|:<>.-]+)*$
+              default: "All"
+            
+            orderContingency:
+              type: string
+              description: >
+                Filter orders based on contingency type.
+                 > 
+                The available options include:
+                  - **All**: All orders
+                  - **OCO**: One-Cancels-the-Other
+                  - **OUO_ABSOLUTE**: One-Updates-the-Other (Absolute)
+                  - **OUO_PROPORTIONAL**: One-Updates-the-Other (Proportional)
+            
+                If not specified, the default value is "All", which includes All contingency types.
+              enum:
+                - All
+                - OCO
+                - OUO_ABSOLUTE
+                - OUO_PROPORTIONAL
+              default: "All"
+
+    TradeVolumeRequest:
+      allOf:
+        - $ref: '#/components/schemas/TradeRequest'
+        - type: object
+          
+    ProfitCoverRequest:
+      allOf:
+        - $ref: '#/components/schemas/TradeProfitGroupByRequest'
+        - $ref: '#/components/schemas/BaseRequest'
+        - $ref: '#/components/schemas/TradeParamsRequest'
+        - type: object
+
+    ProfitSalesRequest:
+      allOf:
+        - $ref: '#/components/schemas/TradeProfitGroupByRequest'
+        - $ref: '#/components/schemas/BaseRequest'
+        - $ref: '#/components/schemas/TradeParamsRequest'
+        - type: object
+
+    ProfitSpreadsRequest:
+      allOf:
+        - $ref: '#/components/schemas/TradeProfitGroupByRequest'
+        - $ref: '#/components/schemas/BaseRequest'
+        - $ref: '#/components/schemas/TradeParamsRequest'
+        - type: object
+
+    TradeStatsRequest:
+      allOf:
+        - $ref: '#/components/schemas/TradeRequest'
+        - type: object
+
+    TradeCompareRequest:
+      allOf:
+        - $ref: '#/components/schemas/TradeCompareGroupByRequest'
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+      type: object
+      properties:
+        compareToStartDate:
+          type: string
+          description: >
+            Start date for comparison. 
+             >
+            The date must be in the format dd-MMM-yyyy (e.g., 01-Jan-2023).
+          minLength: 11
+          maxLength: 11
+        
+        compareToEndDate:
+          type: string
+          description: >
+            End date for comparison. 
+             >
+            The date must be in the format dd-MMM-yyyy (e.g., 31-Dec-2023).
+          minLength: 11
+          maxLength: 11
+        
+        fieldName:
+          type: string
+          description: >
+            Compare data based on this field.
+             >
+            The available fields for comparison include:
+              - **TradeVolume**: Volume of trades
+              - **AvgTrdSize**: Average trade size
+              - **DoneTrades**: Completed trades
+              - **RejectedTrades**: Rejected trades
+              - **PercentRejectedTrades**: Percentage of rejected trades
+        
+            If not specified, the default value is "TradeVolume".
+          enum:
+            - TradeVolume
+            - AvgTrdSize
+            - DoneTrades
+            - RejectedTrades
+            - PercentRejectedTrades
+          default: "TradeVolume"
+        
+        sortAndFilterByField:
+          type: string
+          description: >
+            Sort and filter results based on the specified field and order.
+             > 
+            The format should be `Top|Bottom:Count:Field`, where:
+              - **Top** or **Bottom** specifies the sorting order.
+              - **Count** specifies the number of results to return (use "All" to include All results).
+              - **Field** specifies the field to sort and filter by. 
+        
+            Example: `Top:10:TradeVolume` sorts by the top 10 results based on trade volume.
+        
+            The available fields for sorting and filtering include:
+              - **TradeVolume**: Volume of trades
+              - **AvgTrdSize**: Average trade size
+              - **DoneTrades**: Completed trades
+              - **RejectedTrades**: Rejected trades
+              - **PercentRejectedTrades**: Percentage of rejected trades
+        
+            If not specified, the default value is "Top:All:TradeVolume".
+          pattern: ^(Top|Bottom):((All)|[0-9]+):(TradeVolume|AvgTrdSize|DoneTrades|RejectedTrades|PercentRejectedTrades)$
+          default: "Top:All:TradeVolume"
+        
+        organizationRegions:
+          type: string
+          description: >
+            (i) Filter trades based on the organization region.
+             > 
+            The available regions include:
+              - **All**: All regions
+              - **America**: Americas region
+              - **Asia-Pacific**: Asia-Pacific region
+              - **EMEA**: Europe, Middle East, and Africa region
+        
+            If not specified, the default value is "All", which includes All regions.
+          enum:
+            - All
+            - America
+            - Asia-Pacific
+            - EMEA
+          default: "All"
+        
+        organizationCountries:
+          type: string
+          description: >
+            (i) Filter trades based on the organization country.
+             > 
+            Each country should match the following criteria:
+              - Minimum length: 2 characters
+              - Maximum length: 50 characters
+              - Allowed characters: Alphabetic characters, separated by commas.
+        
+            If not specified, the default value is "All", which includes All countries.
+          minLength: 2
+          maxLength: 50
+          pattern: ^[a-zA-Z]+(?:,[a-zA-Z]+)*$
+          default: "All"
+        
+        organizationSegments:
+          type: string
+          description: >
+            (i) Filter trades based on the organization segment.
+             > 
+            The available segments include:
+              - **All**: All segments
+              - **Institution**: Institutional segment
+              - **Margin FX**: Margin FX segment
+              - **Asset Manager**: Asset Manager segment
+              - **Bank**: Banking segment
+        
+            If not specified, the default value is "All", which includes All segments.
+          enum:
+            - All
+            - Institution
+            - Margin FX
+            - Asset Manager
+            - Bank
+          default: "All"
+        
+        counterparties:
+          type: array
+          description: >
+            The names of the counterparties to filter trade data by.
+             > 
+            Each counterparty name should match the following criteria:
+              - Minimum length: 1 character
+              - Maximum length: 500 characters
+              - Allowed characters: Alphanumeric characters, commas, and asterisks.
+        
+            If not specified, the default value is ["All"], which includes All counterparties.
+          items:
+            type: string
+            minLength: 1
+            maxLength: 500
+            pattern: ^[a-zA-Z0-9+,*]+$
+          default: ["All"]
+        
+        tradeSide:
+          type: string
+          description: >
+            Filter trades based on the maker or taker side.
+             > 
+            The available sides include:
+              - **All**: All trades
+              - **Maker**: Maker trades
+              - **Taker**: Taker trades
+        
+            If not specified, the default value is "All", which includes both maker and taker trades.
+          enum:
+            - All
+            - Maker
+            - Taker
+          default: "All"
+
+      required:
+        - compareToStartDate
+        - compareToEndDate
+
+    TradePositionsRequest:
+      allOf:
+        - $ref: '#/components/schemas/TradePositionsGroupByRequest'
+        - $ref: '#/components/schemas/BaseRequest'
+        - $ref: '#/components/schemas/TradeParamsRequest'
+        - type: object
+
+    TradeSettlementsRequest:
+      allOf:
+        - $ref: '#/components/schemas/TradeSettlementGroupByRequest'
+        - $ref: '#/components/schemas/BaseRequest'
+        - $ref: '#/components/schemas/TradeParamsRequest'
+        - type: object
+
+    OrdersVolumeRequest:
+      allOf:
+        - $ref: '#/components/schemas/OrderRequest'
+        - type: object
+          properties:
+            orderStatus:
+              type: array
+              description: >
+                The types of order statuses to filter by.
+                 > 
+                The available order statuses include:
+                  - **Active**: Active orders
+                  - **Filled**: Filled orders
+                  - **Expired**: Expired orders
+                  - **Declined**: Declined orders
+                  - **Partial**: PartiAlly filled orders
+                  - **Cancelled**: Cancelled orders
+
+                If not specified, the default value is ["All"], which includes All order statuses.
+              items:
+                type: string
+                enum:
+                  - Active
+                  - Filled
+                  - Expired
+                  - Declined
+                  - Partial
+                  - Cancelled
+              default: [ 'All' ]
+            orderTifs:
+              type: array
+              description: >
+                The types of order Time-in-Force (TIF) to filter by.
+                 > 
+                The available TIF types include:
+                  - **IOC**: Immediate or Cancel
+                  - **FOK**: Fill or Kill
+                  - **GTC**: Good Till Cancelled
+                  - **GTD**: Good Till Date
+                  - **GFS**: Good For Session
+                  - **GTX**: Good Till Crossing
+                  - **DAY**: Day
+                  - **NA**: Not Applicable
+                  - **ATC**: At the Close
+                  - **OPG**: On the Open
+                  - **RFS**: Request for Streaming
+
+                If not specified, the default value is ["DAY","GTC","OPG","NA","IOC","FOK","GTX","GTD","GFS","ATC"], which includes All TIF types except "RFS".
+              items:
+                type: string
+                enum:
+                  - RFS
+                  - IOC
+                  - FOK
+                  - GTC
+                  - GTD
+                  - GFS
+                  - GTX
+                  - DAY
+                  - NA
+                  - ATC
+                  - OPG
+              default: ["DAY","GTC","OPG","NA","IOC","FOK","GTX","GTD","GFS","ATC"]
+
+            orderTypes:
+              type: array
+              description: >
+                The types of orders to filter by.
+                 > 
+                The available order types include:
+                  - **LMT**: Limit order
+                  - **MKT**: Market order
+                  - **STOP**: Stop order
+                  - **STOPLIMIT**: Stop-limit order
+                  - **TLSTOP**: Trailing stop order
+                  - **RFS**: Request for Streaming
+
+                If not specified, the default value is ["LIMIT","MARKET","STOP","TLSTOP","STOPLIMIT"], which includes All order types except "RFS".
+              items:
+                type: string
+                enum:
+                  - LMT
+                  - MKT
+                  - STOP
+                  - STOPLIMIT
+                  - TLSTOP
+                  - RFS
+              default: ["LIMIT","MARKET","STOP","TLSTOP","STOPLIMIT"]
+
+    RFSRequest:
+      allOf:
+        - $ref: '#/components/schemas/OrderRequest'
+        - type: object
+          properties:
+            rfsStatus:
+              type: array
+              description: >
+                The types of order statuses to filter by.
+                 > 
+                The available order statuses include:
+                  - **Active**: Active orders
+                  - **Filled**: Filled orders
+                  - **Expired**: Expired orders
+                  - **Declined**: Declined orders
+                  - **Partial**: PartiAlly filled orders
+                  - **Cancelled**: Cancelled orders
+
+                If not specified, the default value is ["All"], which includes All order statuses.
+              items:
+                type: string
+                enum:
+                  - Active
+                  - Filled
+                  - Expired
+                  - Declined
+                  - Partial
+                  - Cancelled
+              default: [ 'All' ]
+
+    OrdersStatisticsRequest:
+      allOf:
+        - $ref: '#/components/schemas/OrderRequest'
+        - type: object
+          properties:
+            orderStatus:
+              type: array
+              description: >
+                The types of order statuses to filter by.
+                 > 
+                The available order statuses include:
+                  - **Active**: Active orders
+                  - **Filled**: Filled orders
+                  - **Expired**: Expired orders
+                  - **Declined**: Declined orders
+                  - **Partial**: PartiAlly filled orders
+                  - **Cancelled**: Cancelled orders
+
+                If not specified, the default value is ["All"], which includes All order statuses.
+              items:
+                type: string
+                enum:
+                  - Active
+                  - Filled
+                  - Expired
+                  - Declined
+                  - Partial
+                  - Cancelled
+              default: [ 'All' ]
+            orderTifs:
+              type: array
+              description: >
+                The types of order Time-in-Force (TIF) to filter by.
+                 > 
+                The available TIF types include:
+                  - **IOC**: Immediate or Cancel
+                  - **FOK**: Fill or Kill
+                  - **GTC**: Good Till Cancelled
+                  - **GTD**: Good Till Date
+                  - **GFS**: Good For Session
+                  - **GTX**: Good Till Crossing
+                  - **DAY**: Day
+                  - **NA**: Not Applicable
+                  - **ATC**: At the Close
+                  - **OPG**: On the Open
+                  - **RFS**: Request for Streaming
+
+                If not specified, the default value is ["DAY","GTC","OPG","NA","IOC","FOK","GTX","GTD","GFS","ATC"], which includes All TIF types except "RFS".
+              items:
+                type: string
+                enum:
+                  - RFS
+                  - IOC
+                  - FOK
+                  - GTC
+                  - GTD
+                  - GFS
+                  - GTX
+                  - DAY
+                  - NA
+                  - ATC
+                  - OPG
+              default: [ "DAY","GTC","OPG","NA","IOC","FOK","GTX","GTD","GFS","ATC" ]
+
+            orderTypes:
+              type: array
+              description: >
+                The types of orders to filter by.
+                 > 
+                The available order types include:
+                  - **LMT**: Limit order
+                  - **MKT**: Market order
+                  - **STOP**: Stop order
+                  - **STOPLIMIT**: Stop-limit order
+                  - **TLSTOP**: Trailing stop order
+                  - **RFS**: Request for Streaming
+
+                If not specified, the default value is ["LIMIT","MARKET","STOP","TLSTOP","STOPLIMIT"], which includes All order types except "RFS".
+              items:
+                type: string
+                enum:
+                  - LMT
+                  - MKT
+                  - STOP
+                  - STOPLIMIT
+                  - TLSTOP
+                  - RFS
+              default: [ "LIMIT","MARKET","STOP","TLSTOP","STOPLIMIT" ]
+
+    AuthRequest:
+      type: object
+      properties:
+        organization:
+          type: string
+          description: >
+            The name of the organization associated with the user account.
+            This field specifies the organization to which the user belongs.
+        
+        username:
+          type: string
+          description: >
+            The username or user ID associated with the user account.
+            This field identifies the user within the organization.
+        
+        password:
+          type: string
+          description: >
+            The password associated with the user account.
+            This field is used for authentication and provides access to the user's account.
+      required:
+        - organization
+        - username
+        - password
+    
+    TradeVolume:
+      type: object
+      properties:
+        numberOfTrades:
+          type: integer
+          format: int64
+          description: The total number of trades.
+        totalVolume:
+          type: number
+          format: double
+          description: The total trading volume.
+        averageDailyVolume:
+          type: integer
+          format: int64
+          description: The average daily volume.
+        averageTradeSize:
+          type: integer
+          format: int64
+          description: The average size of each trade.
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+        groupByField3:
+          type: string
+          description: The third grouping category.
+    TradeDetails:
+      type: object
+      properties:
+        tradeId:
+          type: string
+          description: The transaction Id of the trade.
+        orderId:
+          type: string
+          description: The order Id of the trade.
+        tradeType:
+          type: string
+          description: Trade Type.
+        tenor:
+          type: string
+          description: The tenor of trade (valueDate - tradeDate).
+        tradeDate:
+            type: string
+            description: Date the trade was initiated in the format dd-MMM-yyyy.
+        valueDate:
+          type: string
+          description: Value date in the format dd-MMM-yyyy.
+        fixingDate:
+          type: string
+          description: (NDF trades) Fixing date in the format dd-MMM-yyyy.
+        executionTime:
+          type: string
+          description: Date and time trade was done in the format dd-MMM-yyyy HH:mm:ss,SSS Z.
+        maker:
+          type: boolean
+          description:
+            >
+            - **true**: Maker (the deal was initiated by submitting a request or from working the balance on an outstanding order).
+            
+            - **false**: Taker (the deal was initiated by taking a dealable price in the app).
+        orderSide:
+          type: string
+          description: Side of the order from your perspective, either Buy or Sell
+        status:
+          type: string
+          description: Status of the trade when the message was created Verified/Confirmed/Cancelled/Rejected.
+        rejectReason:
+          type: string
+          description: The reason for trade rejection, if any.
+        symbol:
+          type: string
+          description: Dealt instrument pair (currency, metal, energy, index, crypto), seven-character ISO code (for example, AUD/USD).
+        dealtIns:
+          type: string
+          description: Dealt instrument, three-character ISO code (for example, AUD).
+        dealtAmount:
+          type: number
+          format: double
+          description: Amount of the dealt instrument or near-leg instrument.
+        settledAmount:
+          type: number
+          format: double
+          description: Amount of the settlement instrument.
+        baseAmount:
+          type: number
+          format: double
+          description: Amount of base instrument.
+        termAmount:
+          type: number
+          format: double
+          description: Amount of term instrument.
+        spotrate:
+          type: number
+          format: double
+          description: Spot rate of the trade or near leg of the trade.
+        rate:
+          type: number
+          format: double
+          description: All-in rate
+        forwardPoints:
+          type: number
+          format: double
+          description: Forward points for outright trades and near leg of swaps.
+        customerAccount:
+          type: string
+          description: Customer legal entity ID.
+        customerOrg:
+          type: string
+          description: Customer org ID.
+        trader:
+          type: string
+          description: Customer trader user who did the trade.
+        counterparty:
+          type: string
+          description: Counterparty ID.
+        counterpartyAccount:
+          type: string
+          description: Counterparty legal entity ID.
+        channel:
+          type: string
+          description: Workflow, app, and UI component that originated the request.
+        benchmarkRate:
+          type: number
+          format: double
+          description: Reference benchmark rate.
+        fees:
+          type: number
+          format: double
+          description: Fees on the trade, if any.
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+    TradeStats:
+      type: object
+      properties:
+        totalVolume:
+          type: integer
+          format: int64
+          description: The total trading volume.
+        rejectedVolume:
+          type: integer
+          format: int64
+          description: The volume of rejected trades.
+        rejectedVolumePercentage:
+          type: integer
+          format: int64
+          description: The percentage of rejected volume.
+        totalNumberOfTrades:
+          type: integer
+          format: int64
+          description: The total number of trades.
+        completedTrades:
+          type: integer
+          format: int64
+          description: The number of completed trades.
+        failedTrades:
+          type: integer
+          format: int64
+          description: The number of failed trades.
+        rejectedTrades:
+          type: integer
+          format: int64
+          description: The number of rejected trades.
+        manualTrades:
+          type: integer
+          format: int64
+          description: The number of manual trades.
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+        groupByField3:
+          type: string
+          description: The third grouping category.
+    TradeCompare:
+      type: object
+      properties:
+        period1FieldValue:
+          type: integer
+          format: int64
+          description: value of comparing field in period1.
+        period2FieldValue:
+          type: integer
+          format: int64
+          description: value of comparing field in period2.
+        deltaValue:
+          type: integer
+          format: int64
+          description: difference of the field value from period1 to period2.
+        deltaPercent:
+          type: integer
+          format: int64
+          description: Percentage of the delta Value w.r.t Period1 value.
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+        groupByField3:
+          type: string
+          description: The third grouping category.
+    PositionsCcyPair:
+      type: object
+      properties:
+        netPositionBaseCurrency:
+          type: integer
+          format: int64
+          description: The net Amount of base Currency.
+        netPositionTermCurrency:
+          type: integer
+          format: int64
+          description: The net amount of Term Currency.
+        totalBuyAmountBaseCurrency:
+          type: integer
+          format: int64
+          description: The total Base Currency bought.
+        totalSellAmountBaseCurrency:
+          type: integer
+          format: int64
+          description: The total Base Currency sold.
+        totalBuyAmountTermCurrency:
+          type: integer
+          format: int64
+          description: The total Term Currency bought.
+        totalSellAmountTermCurrency:
+          type: integer
+          format: int64
+          description: The total Term Currency sold.
+        netPositionUSD:
+          type: integer
+          format: int64
+          description: The total of netBase and net Term converted in USD.
+        averageBuyRate:
+          type: integer
+          format: int64
+          description: The average buying rate of Currency Pair.
+        averageSellRate:
+          type: integer
+          format: int64
+          description: The average selling rate of Currency Pair.
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+        groupByField3:
+          type: string
+          description: The third grouping category.
+    PositionsCcy:
+      type: object
+      properties:
+        netPositionAmount:
+          type: integer
+          format: int64
+          description: The net Amount of Currency (buyAmount - sellAmount).
+        totalBuyAmount:
+          type: integer
+          format: int64
+          description: The total amount of Currency bought.
+        totalSellAmount:
+          type: integer
+          format: int64
+          description: The total amount of  Currency sold.
+        netPositionUSD:
+          type: integer
+          format: int64
+          description: The total of net amount converted in USD.
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+        groupByField3:
+          type: string
+          description: The third grouping category.
+    TradeProfit:
+      type: object
+      properties:
+        totalProfit:
+          type: integer
+          format: int64
+          description: The total cover profit in USD.
+        totalVolume:
+          type: integer
+          format: int64
+          description: The total trading volume.
+        totalYield:
+          type: integer
+          format: int64
+          description: The profit made per million of Volume done (profit/volume)*1000000.
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+        groupByField3:
+          type: string
+          description: The third grouping category.
+    ProfitSpreads:
+      type: object
+      properties:
+        totalVolume:
+          type: integer
+          format: int64
+          description: The total trading volume.
+        totalProfit:
+          type: integer
+          format: int64
+          description: The total cover profit in USD.
+        totalYield:
+          type: integer
+          format: int64
+          description: The profit made per million of Volume done (profit/volume)*1000000.
+        pmminspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making min Spread.
+        pmmaxspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making max Spread.
+        pmmktspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making market Spread.
+        pmspotspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making Spot Spread.
+        pmfwdspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making Forward Spread.
+        pmnearspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making Near Leg Spread.
+        pmfarspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making Far Leg Spread.
+        pmprespotspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making pre Spot Spread.
+        pmprefwdspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making pre Forward Spread.
+        pmprenearspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making pre Near Leg Spread.
+        pmprefarspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making pre Far Leg Spread.
+        pmpostspotspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making post Spot Spread.
+        pmpostfwdspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making post Forward Spread.
+        pmpostnearspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making post Near Leg Spread.
+        pmpostfarspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making post Far Leg Spread.
+        ppspotspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Provision Spot Spread.
+        ppfwdspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Provision Forward Spread.
+        ppnearspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Provision Near Leg Spread.
+        ppfarspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Provision Far Leg Spread.
+        ppprespotspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Provision pre Spot Spread.
+        ppprefwdspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Provision pre Forward Spread.
+        ppprenearspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making pre Near Leg Spread.
+        ppprefarspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making pre Far Leg Spread.
+        pppostspotspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making post Spot Spread.
+        pppostfwdspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making post Forward Spread.
+        pppostnearspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making post Near Leg Spread.
+        pppostfarspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making post Far Leg Spread.
+        dpcspread:
+          type: integer
+          format: int64
+          description: Profit made by applying Price Making dpc Spread.
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+        groupByField3:
+          type: string
+          description: The third grouping category.
+    OrdersVolume:
+      type: object
+      properties:
+        averageOrderSize:
+          type: integer
+          format: int64
+          description: The average size of Orders placed. (in USD)
+        usdAmt:
+          type: integer
+          format: int64
+          description: The total Order amount (in USD).
+        filledUsdAmt:
+          type: integer
+          format: int64
+          description: The filled Order Amount (in USD).
+        filledPercent:
+          type: integer
+          format: int64
+          description: The percentage of Order Amount filled (in USD).
+        numberOfOrders:
+          type: integer
+          format: int64
+          description: The total number of Orders placed.
+        pnL:
+          type: integer
+          format: int64
+          description: The profit/Loss made due to PriceImprovement (in USD).
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+        groupByField3:
+          type: string
+          description: The third grouping category.
+    OrdersStats:
+      type: object
+      properties:
+        averageOrderSize:
+          type: integer
+          format: int64
+          description: The average Order size (in USD).
+        usdAmt:
+          type: integer
+          format: int64
+          description: The total Order volume (in USD).
+        filledUsdAmt:
+          type: integer
+          format: int64
+          description: The Filled Order amount (in USD).
+        filledPercent:
+          type: integer
+          format: int64
+          description: The percentage of Order amount filled (in USD).
+        numberOfOrders:
+          type: integer
+          format: int64
+          description: The total number of Orders placed .
+        numLimitOrders:
+          type: integer
+          format: int64
+          description: The total number of Limit Orders placed .
+        numMktOrders:
+          type: integer
+          format: int64
+          description: The total number of Market Orders placed .
+        numRFQOrders:
+          type: integer
+          format: int64
+          description: The total number of RFQ Orders placed .
+        numSTOPOrders:
+          type: integer
+          format: int64
+          description: The total number of STOP Orders placed .
+        numTLSTOPOrders:
+          type: integer
+          format: int64
+          description: The total number of TL STOP Orders placed .
+        numSTOPLimitOrders:
+          type: integer
+          format: int64
+          description: The total number of STOP LImit Orders placed .
+        numRSExpired:
+          type: integer
+          format: int64
+          description: The total number of Orders Expired .
+        numRSExecuted:
+          type: integer
+          format: int64
+          description: The total number of Orders Executed/Filled .
+        numRSInit:
+          type: integer
+          format: int64
+          description: The total number of Active Orders .
+        numRSCancelled:
+          type: integer
+          format: int64
+          description: The total number of Cancelled Orders .
+        numRSDecilned:
+          type: integer
+          format: int64
+          description: The total number of Orders Declined .
+        numRSPartial:
+          type: integer
+          format: int64
+          description: The total number of PartiAlly filled Orders .
+        numGTD:
+          type: integer
+          format: int64
+          description: filter Orders whose Time in Force is GTD.
+        numGTC:
+          type: integer
+          format: int64
+          description: filter Orders whose Time in Force is Good Till Cancelled.
+        numIOC:
+          type: integer
+          format: int64
+          description: filter Orders whose Time in Force is IOC.
+        numFOK:
+          type: integer
+          format: int64
+          description: filter Orders whose Time in Force is FOK.
+        groupByField1:
+          type: string
+          description: The first grouping category.
+        groupByField2:
+          type: string
+          description: The second grouping category.
+        groupByField3:
+          type: string
+          description: The third grouping category.
+    TradeVolumeResponseBody:
+      description: A JSON object containing array of TradeVolume objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/TradeVolume'
+    TradeDetailsResponseBody:
+      description: A JSON object containing array of TradeDetails objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/TradeDetails'
+    TradeStatsResponseBody:
+      description: A JSON object containing array of TradeStats objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/TradeStats'
+    TradeCompareResponseBody:
+      description: A JSON object containing array of TradeCompare objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/TradeCompare'
+    OrdersStatsResponseBody:
+      description: A JSON object containing array of OrderStats objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/OrdersStats'
+    OrdersVolumeResponseBody:
+      description: A JSON object containing array of OrderVolume objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/OrdersVolume'
+    OrderTicketResponseBody:
+      description: A JSON object containing Order ticket response.
+      type: object
+      properties:
+        orderID:
+          type: string
+          description: "Order ID"
+        clientOrderId:
+          type: string
+          description: "Client's order ID"
+        businessDate:
+          type: string
+          description: "Business date"
+        isin:
+          type: string
+          description: "ISIN (International Securities Identification Number)"
+        valueDate:
+          type: string
+          description: "Value date"
+        isPersistent:
+          type: string
+          description: "Indicates if the order is persistent"
+        contingencyType:
+          type: string
+          description: "Contingency type"
+        submitted:
+          type: string
+          description: "Submission status"
+        lastEvent:
+          type: string
+          description: "Last event"
+        status:
+          type: string
+          description: "Order status"
+        org:
+          type: string
+          description: "Organization"
+        channel:
+          type: string
+          description: "Channel"
+        account:
+          type: string
+          description: "Account"
+        lei:
+          type: string
+          description: "LEI (Legal Entity Identifier)"
+        dealer:
+          type: string
+          description: "Dealer"
+        ccyPair:
+          type: string
+          description: "Currency pair"
+        dealtCcy:
+          type: string
+          description: "Dealt currency"
+        buySell:
+          type: string
+          description: "Buy or sell"
+        orderType:
+          type: string
+          description: "Order type"
+        tradeType:
+          type: string
+          description: "Trade type"
+        orderAmt:
+          type: number
+          description: "Order amount"
+        maxShowAmt:
+          type: number
+          description: "Maximum show amount"
+        filledAmt:
+          type: number
+          description: "Filled amount"
+        fillRate:
+          type: number
+          description: "Fill rate"
+    PositionsCcyPairResponseBody:
+      description: A JSON object containing array of Positions CcyPair objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/PositionsCcyPair'
+    PositionsCcyResponseBody:
+      description: A JSON object containing array of Positions Ccy objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/PositionsCcy'
+    ProfitResponseBody:
+      description: A JSON object containing array of TradeProfit objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/TradeProfit'
+    ProfitSpreadsResponseBody:
+      description: A JSON object containing array of TradeProfit objects.
+      type: array
+      items:
+        $ref: '#/components/schemas/ProfitSpreads'
+    TradeTicketResponseBody:
+      description: A JSON object containing Trade ticket response.
+      type: object
+      properties:
+        tid:
+          type: string
+          description: "Trade ID"
+        tradeDate:
+          type: string
+          description: "Date of the trade"
+        tradeType:
+          type: string
+          description: "Type of trade"
+        stream:
+          type: string
+          description: "Stream information"
+        ccyPair:
+          type: string
+          description: "Currency pair"
+        dealt:
+          type: string
+          description: "Dealt amount"
+        execTime:
+          type: string
+          description: "Execution time"
+        state:
+          type: string
+          description: "State of the trade"
+        channel:
+          type: string
+          description: "Trading channel"
+        valueDate:
+          type: string
+          description: "Value date of the trade"
+        takerInfo:
+          type: string
+          description: "Taker information"
+        makerInfo:
+          type: string
+          description: "Maker information"
+        mkrRefId:
+          type: string
+          description: "Maker reference ID"
+        tkrRefId:
+          type: string
+          description: "Taker reference ID"
+        uti:
+          type: string
+          description: "UTI (Unique Transaction Identifier)"
+        usi:
+          type: string
+          description: "USI (Unique Swap Identifier)"
+        utiNameSpace:
+          type: string
+          description: "UTI namespace"
+        orderId:
+          type: string
+          description: "Order ID"
+        isin:
+          type: string
+          description: "ISIN (International Securities Identification Number)"
+        spotDate:
+          type: string
+          description: "Spot date of the trade"
+        spotRate:
+          type: number
+          description: "Spot rate"
+        coverSpotRate:
+          type: number
+          description: "Cover spot rate"
+        orgBuysAmt:
+          type: number
+          description: "Organization buy amount"
+        orgSellsAmt:
+          type: number
+          description: "Organization sell amount"
+        upi:
+          type: string
+          description: "UPI (Unique Product Identifier)"
+        mtfTrade:
+          type: string
+          description: "MTF (Multilateral Trading Facility) trade"
+        executionVenue:
+          type: string
+          description: "Execution venue of the trade"
+        pricingType:
+          type: string
+          description: "Pricing type"
+        accountId:
+          type: string
+          description: "Account ID"
+        lei:
+          type: string
+          description: "LEI (Legal Entity Identifier)"
+        primeBrokerInfo:
+          type: string
+          description: "Prime broker information"
+        salesDealerUser:
+          type: string
+          description: "Sales dealer user"
+        salesDealerAcct:
+          type: string
+          description: "Sales dealer account"
+  requestBodies:
+
+    TradeVolumeRequestBody:
+      description: A JSON object containing Trade Volume Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TradeVolumeRequest'
+          examples:
+            volume-Basic:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Org"]
+              }
+            volume-Grpbys:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Cpty","TrdType","CcyPair"]
+              }
+    TradeDetailsRequestBody:
+      description: A JSON object containing Trade Details Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TradeDetailsRequest'
+          examples:
+            Details-Basic:
+              value: {
+                "organizations": [ "OrganizationID" ],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": [ "All" ],
+                "groupBy": [ "None" ]
+              }
+
+    TradeStatsRequestBody:
+      description: A JSON object containing Trade Statistics Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TradeStatsRequest'
+          examples:
+            Stats:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Org"]
+              }
+
+    TradePositionsRequestBody:
+      description: A JSON object containing Trade Positions Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TradePositionsRequest'
+          examples:
+            Positions:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Org"]
+              }
+
+    TradeSettlementsRequestBody:
+      description: A JSON object containing Trade Positions Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TradeSettlementsRequest"
+          examples:
+            Settlements:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Org"]
+              }
+
+    TradeCompareRequestBody:
+      description: A JSON object containing Trade Compare Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TradeCompareRequest'
+          examples:
+            compareVolume:
+              value: {
+                "fieldName": "TradeVolume",
+                "organizations": ["OrganizationID"],
+                "groupBy": ["Org"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "compareToStartDate": "01-Apr-2023",
+                "compareToEndDate": "01-Apr-2023",
+                "tradeTypes": ["spot"]
+              }
+            compareTop5:
+              value: {
+                "fieldName": "TradeVolume",
+                "organizations": ["OrganizationID"],
+                "groupBy": ["Org"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "compareToStartDate": "01-Apr-2023",
+                "compareToEndDate": "01-Apr-2023",
+                "sortAndFilterByField": "Top:5:TradeVolume",
+                "tradeTypes": ["spot"]
+              }
+
+    ProfitCoverRequestBody:
+      description: A JSON object containing Profit Cover Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProfitCoverRequest'
+          examples:
+            Profit:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Org"]
+              }
+    ProfitSalesRequestBody:
+      description: A JSON object containing Profit Cover Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProfitSalesRequest'
+          examples:
+            Profit:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Org"]
+              }
+    ProfitSpreadsRequestBody:
+      description: A JSON object containing Profit Cover Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProfitSpreadsRequest'
+          examples:
+            Profit:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Org"]
+              }
+    OrdersStatisticsRequestBody:
+      description: A JSON object containing Orders Statistics Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrdersStatisticsRequest'
+          examples:
+            Stats:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Org"]
+              }
+
+    AuthRequestBody:
+      description: A JSON object containing Auth Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthRequest'
+
+    RFSVolumeRequestBody:
+      description: A JSON object containing RFS Volume Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RFSRequest'
+          examples:
+            volume-Basic:
+              value: {
+                "organizations": [ "OrganizationID" ],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": [ "All" ],
+                "groupBy": [ "Org" ]
+              }
+
+    OrdersVolumeRequestBody:
+      description: A JSON object containing Orders Volume Request information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrdersVolumeRequest'
+          examples:
+            volume-Basic:
+              value: {
+                "organizations": ["OrganizationID"],
+                "startDate": "01-May-2023",
+                "endDate": "01-May-2023",
+                "tradeTypes": ["All"],
+                "groupBy": ["Org"]
+              }
+  securitySchemes:
+    jwtTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKeyAuth:
+      name: X-API-KEY
+      type: apiKey
+      in: header

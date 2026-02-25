@@ -1,0 +1,13 @@
+customer_name:
+repository:
+api_endpoints: []
+auth_method:
+auth_details:
+test_output_folder: src/test/autogened_by_checksum
+test_output_format: pytest
+test_descriptions: []
+additional_context:
+phase: sales
+openapi_url: https://docs.fxinside.net/page-data/shared/oas-openapi/integral-api-reference/rest.yaml.json[.definition],
+graphql_reflection_url:
+
